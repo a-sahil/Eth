@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect MetaMask</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #f6851b;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+    button:hover {
+      background-color: #e2761b;
+    }
+    .wallet-address {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Connect Wallet</h1>
+  <button id="connectWallet" onclick="connectWallet()">Connect Wallet</button>
+  <div class="wallet-address" id="walletAddress"></div>
+
+  <h1>Extract Last Word</h1>
+  <div>
+    <input type="text" id="userInput" placeholder="Type something here..." />
+    <button onclick="extractLastWord()">Enter</button>
+  </div>
+  <div class="result" id="result"></div>
+
+  <script>
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          // Request account access from MetaMask
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const walletAddress = accounts[0];
+          
+          // Display connected wallet address
+          document.getElementById('walletAddress').textContent = `Connected Wallet: ${walletAddress}`;
+        } catch (error) {
+          console.error('User rejected the connection or an error occurred', error);
+          document.getElementById('walletAddress').textContent = 'Failed to connect wallet.';
+        }
+      } else {
+        alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
+      }
+    }
+
+
+    function extractLastWord() {
+      const input = document.getElementById('userInput').value.trim();
+      const lastWord = input.split(' ').filter(word => word).pop(); // Split and get the last word
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = lastWord ? `Last word: "${lastWord}"` : 'Please enter a valid input.';
+    }
+  </script>
+</body>
+</html>
